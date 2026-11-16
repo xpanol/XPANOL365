@@ -137,6 +137,11 @@ html:root[data-palette] h1 b{color:var(--hl,var(--acc))}
 .hr.now{background:var(--soft)}.hr.now .hl{color:var(--ink);font-weight:bold}
 
 /* WORD OF THE DAY | PALABRA DEL DÍA */
+.wod h3{
+  padding-right:0;
+  white-space:nowrap;
+  font-size:clamp(13px,4vw,17px);
+}
 .wod{background:var(--paper);border-top:4px solid var(--acc)}
 .wod .wod-kicker{font-size:12px;letter-spacing:.12em;color:var(--mute);margin-bottom:8px}
 .wod .wod-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 12px}
