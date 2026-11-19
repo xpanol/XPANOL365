@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XPANOL 365</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--on:#fff;--bg:#5C4B99;--paper:#fff;--ink:#241a40;--mute:#6f6791;--line:#ddd7ee;--acc:#F8AC10;--accink:#241a40;--soft:#f3f0fa;--hi:#e8530e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a2147;--paper:#1c1633;--ink:#f1edfb;--mute:#a69fc4;--line:#3b3162;--soft:#261e42}}
+:root[data-theme="dark"]{--bg:#2a2147;--paper:#1c1633;--ink:#f1edfb;--mute:#a69fc4;--line:#3b3162;--soft:#261e42}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Special Elite","Courier New",monospace}
+.wrap{max-width:1000px;margin:0 auto;padding:14px}
+header{color:var(--on);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:end;justify-content:space-between;padding:6px 2px 12px}
+h1{margin:0;font-size:28px;line-height:1}
+h1 b{color:var(--acc);font-weight:400}
+.tag{font-size:13px;opacity:.85}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.seg{display:flex;border:2px solid var(--on);border-radius:8px;overflow:hidden}
+.seg button{background:transparent;color:var(--on);border:0;padding:6px 12px}
+.seg button.on{background:var(--acc);color:var(--accink)}
+.card{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:14px;margin-bottom:12px}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.nav h2{margin:0;font-size:20px}
+.ib{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:4px 12px}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dow{font-size:12px;color:var(--mute);text-align:center}
+.cell{aspect-ratio:1/1;min-width:0;overflow:hidden;border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:3px 4px;text-align:left;display:flex;flex-direction:column;justify-content:flex-start}.cell .dots{margin-top:auto}.cell.sel{background:var(--soft);border:2px solid var(--bg)}
+.cell.out{opacity:.35}.cell.today{border:2px solid var(--num,var(--acc))}
+.cell small{display:block;font-size:11px;color:var(--mute);line-height:1.2}
+.dots{display:flex;gap:3px;flex-wrap:wrap}.dots i{width:7px;height:7px;border-radius:50%;background:var(--btn,var(--bg))}.dots i.l{background:var(--acc)}.ev{font-size:11px;line-height:1.3;background:var(--btn,var(--bg));color:var(--btnon,var(--on));border-radius:4px;padding:1px 4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ev.h{background:var(--hi)}.ev.x{opacity:.5;text-decoration:line-through}@keyframes wob{0%,84%,100%{transform:none}87%{transform:translateX(-2px) rotate(-1.5deg)}90%{transform:translateX(2px) rotate(1.5deg)}93%{transform:translateX(-1px) rotate(-.5deg)}}@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(232,83,14,0)}50%{box-shadow:0 0 8px 2px rgba(232,83,14,.6)}}.ev.h:not(.x){font-weight:bold;background:linear-gradient(90deg,#e8530e,#F8AC10);color:#241a40;animation:wob 4s infinite,glow 2s infinite}.row.hi{background:linear-gradient(90deg,rgba(232,83,14,.18),transparent);border-left:4px solid var(--hi);padding-left:8px;animation:wob 4s infinite}.row.hi span{font-weight:bold;color:var(--hi)}@media (prefers-reduced-motion:reduce){.ev.h,.row.hi{animation:none}}
+.lang{background:var(--acc);color:var(--accink);border-radius:10px;padding:14px;margin-bottom:12px}
+.lang .k{display:inline-block;border:1px solid var(--accink);border-radius:4px;padding:0 6px;font-size:12px}
+.pair{display:grid;gap:8px;margin:10px 0}
+.rev{width:100%;text-align:left;background:rgba(255,255,255,.55);border:1px solid var(--accink);border-radius:8px;padding:8px 10px}
+.rev.hid{opacity:.7;letter-spacing:1px}
+.rev em{display:block;font-style:normal;font-size:13px}
+.row{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line)}
+.row input[type=checkbox]{width:20px;height:20px;accent-color:var(--btn,var(--bg))}
+.row span{flex:1}.row .done{text-decoration:line-through;color:var(--mute)}
+.p{border:1px solid var(--line);background:var(--soft);border-radius:6px;padding:0 8px;font-size:13px}
+.p.h{background:var(--hi);color:#fff;border-color:var(--hi)}
+.add{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.add input,textarea{flex:1;width:100%;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px}
+textarea{min-height:220px;resize:vertical;line-height:1.6}summary b{display:block;font-size:16px}summary .xs{display:block;font-size:16px;margin-top:2px}summary{cursor:pointer;font-size:17px;padding:26px 0 0}.lang h3{padding-right:0}.hd{position:absolute;top:10px;right:10px;font-size:14px;padding:0 8px}.mv{position:absolute;top:10px;right:50px;display:flex;gap:4px}.p:disabled{opacity:.3;cursor:default}.prow{display:flex;gap:6px;align-items:stretch}.prow .rev{flex:1}.prow .p{font-size:18px;padding:0 10px}.ph{border-top:1px solid rgba(36,26,64,.25);padding-top:10px;margin-top:12px}.lang .p{background:rgba(255,255,255,.55);border-color:var(--accink);color:var(--accink)}.lang .dark-go{margin-top:0}.chips{display:flex;flex-wrap:wrap;margin-top:8px}.chip{background:rgba(255,255,255,.5);border:1px solid var(--accink);border-radius:999px;padding:2px 12px;color:var(--accink);margin:0 6px 6px 0}.chip.on{background:var(--accink);color:#fff}.rv{margin:10px 0}.tile{background:#fff;color:var(--accink);border:2px solid var(--accink);border-radius:6px;padding:6px 12px;margin:0 8px 8px 0;box-shadow:0 3px 0 var(--accink)}.tile.on{background:var(--accink);color:#fff}.tile:active{transform:translateY(3px);box-shadow:none}.ans{min-height:58px;border:2px dashed var(--accink);border-radius:8px;padding:8px 8px 0;margin:10px 0}.lang .muted{color:var(--accink);opacity:.85}.lang .muted{color:var(--accink);font-size:16px}.lang p,.lang .rev,.lang .rv div,.lang .k{font-size:16px;color:var(--accink)}.lang .k{font-size:13px}#snd{border:2px solid var(--on);background:transparent;color:var(--on);border-radius:8px;padding:6px 12px}#snd.on{background:var(--acc);color:var(--accink);border-color:var(--acc)}.alert{background:var(--hi);color:#fff;border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:18px;box-shadow:0 6px 20px rgba(0,0,0,.35);animation:wob 1.2s 3}.alert .go{background:#fff;color:#241a40}@media (prefers-reduced-motion:reduce){.alert{animation:none}}.card h3{padding-right:108px}.hb.on{background:var(--acc);color:var(--accink);border-color:var(--accink);font-weight:bold}.hb .p{margin-left:2px}
+.go{background:var(--btn,var(--bg));color:var(--btnon,var(--on));border:0;border-radius:8px;padding:8px 14px}
+.dark-go{background:var(--accink);color:#fff;border:0;border-radius:8px;padding:6px 12px;margin-right:6px}
+h3{margin:0 0 8px;font-size:17px}
+.muted{color:var(--mute);font-size:13px}.bigdate{display:inline-flex;align-items:stretch;gap:18px;line-height:1}.bigdate b{font-weight:400;font-size:116px;line-height:.78;padding-top:.2em;color:var(--bg);letter-spacing:-3px;display:flex;align-items:center}.bigdate span{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;border-left:4px solid var(--acc);padding:0 0 0 20px;font-size:42px;letter-spacing:.35em}.bigdate small{font-size:15px;letter-spacing:.25em;color:var(--mute)}.dc{text-align:center;padding:4px 0 2px}.dcard{background:#fbf6e9;border-bottom:3px solid #eadcb4}.dcard .ib{background:rgba(255,255,255,.7);border-color:#e6d8b0;color:#241a40}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .dcard{background:#3b3162}:root:not([data-theme="light"]) .dcard .ib{background:rgba(255,255,255,.1);border-color:#54488a;color:#f1edfb}}:root[data-theme="dark"] .dcard{background:#3b3162}:root[data-theme="dark"] .dcard .ib{background:rgba(255,255,255,.1);border-color:#54488a;color:#f1edfb}.dc .wd{font-size:16px;margin-top:10px;letter-spacing:.06em}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bigdate b{color:var(--acc)}}:root[data-theme="dark"] .bigdate b{color:var(--acc)}@media (max-width:520px){.bigdate b{font-size:84px}.bigdate span{font-size:28px;padding-left:14px}.bigdate{gap:12px}}
+.hab{display:flex;flex-wrap:wrap;gap:8px}
+.hab label{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--soft);display:flex;gap:6px;align-items:center}
+.hab input{accent-color:var(--btn,var(--bg))}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:520px){h1{font-size:24px}}.ev{display:none}.cellbig .ev{display:block}.cellbig .dots i:not(.l){display:none}
+html:root[data-palette="sand"]{--bg:#8c7355;--on:#fffaf0;--paper:#fffdf8;--ink:#3b2f24;--mute:#7b6a58;--line:#e6dccb;--acc:#e8d5b0;--accink:#3b2f24;--soft:#f4ede0;--hi:#b5532f;--dc:#f7f0e3;--dcb:#e0d2b6;--num:#6b543a;--hl:#ffffff}
+html:root[data-palette="mocha"]{--bg:#5a4332;--on:#f6ede3;--paper:#fbf7f2;--ink:#2e2118;--mute:#7a6857;--line:#e3d7ca;--acc:#d9b99b;--accink:#2e2118;--soft:#f1e8de;--hi:#a6492b;--dc:#f3e9dd;--dcb:#d8c3ab;--num:#5a4332}
+html:root[data-palette="rose"]{--bg:#e6c2c6;--on:#3d2a2e;--paper:#fffafa;--ink:#3d2a2e;--mute:#6f5258;--line:#f0dcdd;--acc:#f3d3d6;--accink:#3d2a2e;--soft:#fbeeee;--hi:#a6405a;--dc:#fdf3f1;--dcb:#ecd0d0;--num:#8f3f54;--btn:#9a4a5c;--btnon:#ffffff;--hl:#2b1a1f}
+html:root[data-palette="stone"]{--bg:#7d746b;--on:#fbf8f4;--paper:#fdfbf8;--ink:#2f2a26;--mute:#7a726a;--line:#e4ded6;--acc:#e6dccf;--accink:#2f2a26;--soft:#f3efe9;--hi:#a65a3a;--dc:#f6f1ea;--dcb:#d9cfc2;--num:#5e564e;--hl:#ffffff}
+html:root[data-palette="sage"]{--bg:#5f7a64;--on:#f7fbf5;--paper:#fbfcf9;--ink:#27332a;--mute:#5d6e60;--line:#dde5d9;--acc:#cfdcc6;--accink:#27332a;--soft:#eef3ea;--hi:#b4573a;--dc:#f4f7f0;--dcb:#cfd9c6;--num:#4d6a53;--btn:#5f7a64;--btnon:#ffffff;--hl:#ffffff}
+html:root[data-palette="butter"]{--bg:#f3dd8c;--on:#3b3213;--paper:#fffdf4;--ink:#3b3213;--mute:#6d6234;--line:#efe4b8;--acc:#f8e9a6;--accink:#3b3213;--soft:#fcf6dc;--hi:#b5532f;--dc:#fffbe8;--dcb:#eadc9b;--num:#8a6a10;--btn:#8a6a10;--btnon:#ffffff;--hl:#2b1a1f}
+html:root[data-palette="terra"]{--bg:#a65a40;--on:#fff7f0;--paper:#fffaf6;--ink:#3a2217;--mute:#7a5444;--line:#ecd8cb;--acc:#efc9b0;--accink:#3a2217;--soft:#f8ece4;--hi:#8c3b22;--dc:#fbf1ea;--dcb:#e3c7b5;--num:#9a4a30;--btn:#a65a40;--btnon:#ffffff;--hl:#ffffff}
+html:root[data-palette="denim"]{--bg:#5d7898;--on:#ffffff;--paper:#fbfcfe;--ink:#1f2a38;--mute:#556275;--line:#d9e1ec;--acc:#cddaea;--accink:#1f2a38;--soft:#edf2f8;--hi:#b45a3c;--dc:#f3f6fb;--dcb:#cad6e6;--num:#46617f;--btn:#5d7898;--btnon:#ffffff;--hl:#ffffff}
+html:root[data-palette="lav"]{--bg:#cbbfe6;--on:#2d2545;--paper:#fdfcff;--ink:#2d2545;--mute:#5f5680;--line:#e3dcf3;--acc:#ddd3f2;--accink:#2d2545;--soft:#f4f0fc;--hi:#a8466b;--dc:#f8f5fe;--dcb:#d8cdef;--num:#6a4fa3;--btn:#6a4fa3;--btnon:#ffffff;--hl:#2b1a1f}
+html:root[data-palette="cherry"]{--bg:#7b2d3f;--on:#fff2f0;--paper:#fffafa;--ink:#351a20;--mute:#7a4e57;--line:#efd9dc;--acc:#f0c9ce;--accink:#351a20;--soft:#f9ecee;--hi:#a31f3a;--dc:#fcf1f2;--dcb:#e8c3c9;--num:#7b2d3f;--btn:#7b2d3f;--btnon:#ffffff}
+html:root[data-palette] .bigdate b{color:var(--num)}
+html:root[data-palette] .dcard{background:var(--dc);border-bottom-color:var(--dcb)}
+html:root[data-palette] .dcard .ib{background:rgba(255,255,255,.6);border-color:var(--dcb);color:var(--ink)}
+html:root[data-palette] .dots i:not(.l){background:var(--num)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.25)}
+.wheel{position:relative;margin:6px auto;border-radius:50%;background:rgba(255,255,255,.45);touch-action:none;user-select:none;-webkit-user-select:none}
+.wsvg{position:absolute;inset:0;pointer-events:none}.wsvg polyline{stroke:var(--accink);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
+.wl{position:absolute;width:46px;height:46px;border-radius:50%;background:#fff;color:var(--accink);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--accink);pointer-events:none}.wl.on{background:var(--accink);color:#fff}
+.wbub{height:36px;text-align:center;font-size:26px;letter-spacing:5px;color:var(--accink)}.wbub.wrong{animation:wob .4s}
+.wslots{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;margin:10px 0}.wslot{display:flex;align-items:center;gap:3px}
+.wc{width:22px;height:24px;border:2px solid var(--accink);border-radius:4px;background:rgba(255,255,255,.55);display:inline-flex;align-items:center;justify-content:center;font-size:15px;color:var(--accink)}.wc.on{background:#4f8a5b;color:#fff;border-color:#4f8a5b}.wc.hint{background:rgba(36,26,64,.14)}.wslot.pick{outline:2px dashed var(--accink);outline-offset:3px;border-radius:6px}
+.stage{position:relative;padding-right:48px}
+.book{position:relative;z-index:1;background:var(--paper);border-radius:8px 14px 14px 8px;padding:14px 14px 2px;box-shadow:0 4px 0 var(--line),0 8px 0 rgba(0,0,0,.15),5px 0 9px rgba(0,0,0,.22)}
+#mt,#mt2{position:absolute;top:14px;bottom:0;right:0;width:62px}#mt{z-index:0}#mt2{z-index:2;pointer-events:none}.mtab.hid{visibility:hidden}#mt2 .mtab.on{pointer-events:auto}.mtin{position:sticky;top:10px;display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.mtab{position:relative;z-index:0;width:58px;height:var(--th,min(38px,calc((100vh - 190px)/12)));min-height:20px;border:0;border-radius:0 10px 10px 0;color:var(--accink);font-size:10px;line-height:1.05;letter-spacing:.06em;padding:0 4px 0 15px;text-align:left;display:flex;flex-direction:column;justify-content:center;box-shadow:2px 2px 0 rgba(0,0,0,.22);background:var(--acc);transition:width .15s}
+.mtab:hover{width:61px}.mtab.on{z-index:2;width:64px;background:var(--paper)!important;color:var(--ink);font-weight:bold;box-shadow:3px 0 0 rgba(0,0,0,.25)}
+@media (max-width:520px){.stage{padding-right:40px}#mt,#mt2{width:52px}.mtab{width:48px;padding-left:14px}.mtab:hover{width:50px}.mtab.on{width:52px}}
+#cover{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;perspective:1500px;padding:16px;background:#222;background:color-mix(in srgb,var(--bg) 55%,#000);transition:background .8s}
+.cvbook{position:relative;width:min(92vw,420px);height:min(86vh,600px);border-radius:6px 16px 16px 6px;background:var(--bg);background:linear-gradient(135deg,var(--bg),color-mix(in srgb,var(--bg) 80%,#000));box-shadow:0 18px 40px rgba(0,0,0,.5);transform-origin:left center;transition:transform .8s ease,opacity .8s ease}
+.cvbook::before{content:"";position:absolute;left:0;top:0;bottom:0;width:24px;border-radius:6px 0 0 6px;background:linear-gradient(90deg,rgba(0,0,0,.38),rgba(255,255,255,.08) 65%,rgba(0,0,0,.18))}
+.cvbook::after{content:"";position:absolute;inset:14px 14px 14px 38px;border:2px dashed currentColor;opacity:.3;border-radius:10px;pointer-events:none;color:var(--on)}
+.cvband{position:absolute;top:0;bottom:0;right:30px;width:16px;background:var(--acc);box-shadow:inset 2px 0 3px rgba(0,0,0,.25),inset -2px 0 3px rgba(0,0,0,.15)}
+.cvin{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:36px 56px 34px 56px;color:var(--on)}
+.cvtop{font-size:12px;letter-spacing:.25em}.cvt{font-size:clamp(42px,12vw,68px);line-height:1;letter-spacing:.06em}
+.cvt b{display:block;font-weight:400;font-size:1.5em;letter-spacing:.12em;margin-top:10px}
+.cvtag{font-size:15px;line-height:1.5}.cvplate{border:2px solid currentColor;padding:6px 14px;letter-spacing:.18em;font-size:12px}.cvyear{font-size:13px;letter-spacing:.12em}
+.cvbtn{background:var(--on);color:var(--bg);border:0;border-radius:999px;padding:10px 28px;font-size:16px}
+#cover.open{background:transparent;pointer-events:none}#cover.open .cvbook{transform:rotateY(-105deg);opacity:0}
+@media (prefers-reduced-motion:reduce){#cover,.cvbook{transition:none}}
+html:root[data-palette] h1 b{color:var(--hl,var(--acc))}
+#hideb{border:2px solid var(--on);background:transparent;color:var(--on);border-radius:8px;padding:6px 12px}
+#fb{display:none;position:fixed;left:10px;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:150;border:2px solid var(--on);background:var(--bg);color:var(--on);border-radius:999px;padding:6px 14px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.focus #fb{display:block}.focus header,.focus .bar{display:none}.focus .wrap{padding-top:54px}
+#fs{display:none;position:fixed;left:136px;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:150;border:2px solid var(--on);background:var(--bg);color:var(--on);border-radius:999px;padding:6px 12px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.focus #fs{display:block}
+.focus .wrap{max-width:none;padding:40px 4px 4px}
+.focus .hint{display:none}
+.focus .ycard{display:flex;flex-direction:column;height:calc(100vh - 52px);height:calc(100dvh - 52px);margin-bottom:0;padding:6px}.focus .ycard .nav{margin-bottom:4px}.focus .ycard .nav h2{font-size:16px}.focus .ycard .ib{padding:2px 10px}.focus .mcard{margin-bottom:0}
+.focus .mcard .grid{margin:0 auto;gap:3px}.focus .book{padding:4px 16px 0 4px}.focus .mcard{padding:4px}
+.focus .cell{aspect-ratio:auto;height:100%;min-height:0}
+.ygrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.ymon{border:1px solid var(--line);border-radius:8px;padding:6px;background:var(--paper);display:flex;flex-direction:column;min-height:0}
+.ytit{border:0;background:transparent;font-weight:bold;font-size:max(9px,calc(var(--yf,11px)*1.1));text-align:left;padding:0 0 4px;color:var(--ink)}
+.ymg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-template-rows:auto repeat(6,minmax(0,1fr));gap:1px;flex:1;min-height:0}
+.yd{border:0;background:transparent;font-size:var(--yf,clamp(9px,1.3vw,13px));padding:0;text-align:center;color:var(--ink);min-width:0}.yd.we{color:var(--mute)}.yd{position:relative;isolation:isolate}
+.yd.has{padding-bottom:calc(var(--yf,11px)*.3)}
+.yd.has::before{content:"";position:absolute;left:50%;bottom:7%;transform:translateX(-50%);width:60%;height:max(2px,calc(var(--yf,11px)*.2));border-radius:2px;background:var(--num,var(--bg))}
+.yd.imp{font-weight:bold;color:var(--hi)}.yd.imp::before{height:max(3px,calc(var(--yf,11px)*.28));background:var(--hi)}
+.yd.today{font-weight:bold;background:var(--acc);color:var(--accink);border-radius:4px}.yd.today.imp{color:var(--accink)}.ydow{font-size:max(7px,calc(var(--yf,10px)*.8));color:var(--mute);text-align:center}
+.focus .ygrid{flex:1;min-height:0;grid-template-rows:repeat(3,minmax(0,1fr))}
+@media (orientation:portrait){.ygrid{grid-template-columns:repeat(3,minmax(0,1fr))}.focus .ygrid{grid-template-rows:repeat(4,minmax(0,1fr))}}
+#fy{display:none;position:fixed;left:190px;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:150;border:2px solid var(--on);background:var(--bg);color:var(--on);border-radius:999px;padding:6px 14px;box-shadow:0 2px 6px rgba(0,0,0,.3)}.focus #fy{display:block}
+.focus .stage{padding-right:38px}.focus #mt,.focus #mt2{width:52px}.focus .mtab{width:50px;padding-left:13px}.focus .mtab:hover{width:52px}.focus .mtab.on{width:56px}
+.focus .mcard .nav{margin-bottom:4px}.focus .mcard .nav h2{font-size:16px}.focus .mcard .ib{padding:2px 10px}
+#fb,#fs,#fy{padding:4px 10px;font-size:14px;top:calc(env(safe-area-inset-top,0px) + 5px)}
+.cell>span{font-size:clamp(12px,calc(var(--cs,56px)*.24),34px)}.cell small{font-size:clamp(9px,calc(var(--cs,56px)*.12),15px)}.ev{font-size:clamp(9px,calc(var(--cs,56px)*.12),17px)}
+.grid.tr{grid-auto-flow:column;grid-template-columns:22px repeat(var(--rows,6),minmax(0,1fr));grid-template-rows:repeat(7,auto)}.grid.tr .dow{align-self:center;text-align:right;padding-right:4px}
+.mtab{font-size:clamp(8px,calc(var(--th,30px)*.3),15px);font-weight:600;line-height:1.05;letter-spacing:.02em;align-items:center;text-align:center;padding-right:4px;white-space:nowrap}
+.agenda{margin-top:8px;border-top:2px solid var(--line);padding-top:6px;display:flex;flex-direction:column;min-height:0}.agenda h3{margin:0 0 4px;font-size:15px;padding-right:0}
+.alist{flex:1;overflow:auto;min-height:0;max-height:260px}.focus .alist{max-height:none}
+.arow{display:flex;gap:8px;align-items:center;width:100%;padding:7px 2px;border:0;border-bottom:1px dashed var(--line);background:transparent;text-align:left;font-size:15px;color:var(--ink)}
+.arow b{min-width:52px;color:var(--num,var(--bg))}.arow .t{color:var(--mute);min-width:44px}.arow.h{color:var(--hi);font-weight:bold}.arow.x{text-decoration:line-through;opacity:.6}
+.agenda .add input[type=date]{flex:0 0 150px;width:150px}
+.cell{position:relative}.cell.we{background:var(--soft)}.grid.fl{grid-auto-flow:row}.grid.fl>div{display:none}
+.grid.fl .cell::before{content:attr(data-wd);position:absolute;top:3px;right:5px;font-size:clamp(9px,calc(var(--cs,56px)*.15),16px);color:var(--mute)}
+.hr{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}.hl{flex:0 0 50px;color:var(--mute);font-size:14px;text-align:right}
+.hr input{flex:1;min-width:0;border:0;background:transparent;padding:11px 4px;font-size:16px;color:var(--ink)}.hr input:focus{background:var(--soft);outline:none}
+.hr.now{background:var(--soft)}.hr.now .hl{color:var(--ink);font-weight:bold}
+#fbar{display:none;position:fixed;left:10px;top:calc(env(safe-area-inset-top,0px) + 5px);z-index:150;gap:8px;align-items:center}.focus #fbar{display:flex}
+#fbar button{position:static!important;display:block!important;border:2px solid var(--on);background:var(--bg);color:var(--on);border-radius:999px;padding:4px 12px;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.3);white-space:nowrap}
+.wod{border-left:6px solid var(--acc)}.wodw{font-size:26px;line-height:1.25;color:var(--num,var(--ink));margin:2px 0}.wodx{margin-top:12px;font-size:16px}.wodx div{margin:5px 0}
+
+.mk .pair{display:flex;gap:8px;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--line)}.mk a.dark-go{display:inline-block;text-decoration:none;margin-top:10px}
+</style>
+</head>
+<body>
+<div id="cover" role="dialog" aria-modal="true" aria-label="Cover">
+<div class="cvbook"><div class="cvband"></div><div class="cvin">
+<div class="cvtop">AGENDA DIGITAL · ES / EN</div>
+<div class="cvt">XPANOL<b>365</b></div>
+<div class="cvtag">Plan your life.<br>Grow your language.<br>Planifica tu vida.<br>Haz crecer tu idioma.</div>
+<div class="cvplate">DIGITAL MARKETING</div>
+<div class="cvyear" id="cvy"></div>
+<button type="button" class="cvbtn" id="cvo">Abrir / Open</button>
+</div></div></div>
+<div id="fbar"><button id="fb" type="button">☰ Menú / Menu</button><button id="fy" type="button">▦ Año / Year</button><button id="fs" type="button" aria-label="Pantalla completa / Full screen">⛶</button></div>
+<div class="wrap">
+<header>
+<div><h1>XPANOL <b>365</b></h1><div class="tag">Plan your life. Grow your language.</div></div>
+<div class="seg" id="mode" role="group" aria-label="Calendar model"><button data-m="cal">Calendar Year</button><button data-m="roll">Rolling 365</button></div>
+</header>
+<div class="bar"><div class="seg" id="tabs" role="tablist"><button data-t="year">Año / Year</button><button data-t="month">Mes / Month</button><button data-t="day">Día / Day</button><button data-t="review">Repaso / Review</button><button data-t="data">Datos / Data</button></div><button class="ib" id="snd" type="button" aria-pressed="false"></button><button class="ib" id="hideb" type="button">▲ Ocultar menú / Hide menu</button></div>
+<div class="stage"><nav id="mt" aria-label="Meses / Months"><div class="mtin"></div></nav><div class="book"><main id="app"></main></div><nav id="mt2" aria-hidden="true"><div class="mtin"></div></nav></div>
+</div>
+<script>
+const MES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const MON=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DOW=["L","M","X","J","V","S","D"];
+const HABITS=["Inbox zero","Walk","Read 10 min"];
+const ACT=[
+{k:"PHRASE",lv:"B2",es:"¿Podemos ir al grano?",en:"Let’s get straight to the point.",ex:"Meeting opener: save time with the client."},
+{k:"IDIOM",lv:"C1",es:"Mover el balón a su campo",en:"Ball is in their court.",ex:"Follow-up: you sent the proposal, now they must answer."},
+{k:"PHRASE",lv:"B2",es:"Te hago un seguimiento esta semana.",en:"I’ll circle back to you this week.",ex:"Buying time without sounding vague."},
+{k:"IDIOM",lv:"C1",es:"Ir con pies de plomo",en:"To tread carefully.",ex:"Budget talks after a weak quarter."},
+{k:"PHRASE",lv:"B2",es:"Los resultados están por debajo de lo previsto.",en:"Results are below forecast.",ex:"Reporting: neutral and factual."},
+{k:"IDIOM",lv:"C1",es:"Estar en la misma onda",en:"To be on the same page.",ex:"Check alignment before launching a campaign."},
+{k:"PHRASE",lv:"B2",es:"Entiendo tu punto, pero veo otra opción.",en:"I see your point, but I’d suggest another route.",ex:"Pushing back politely."},
+{k:"IDIOM",lv:"C1",es:"Tirar la toalla antes de tiempo",en:"To throw in the towel too early.",ex:"Pausing a campaign before data is in."},
+{k:"PHRASE",lv:"B1",es:"¿Me puedes aclarar este dato?",en:"Could you clarify this figure?",ex:"Analytics review with the team."},
+{k:"IDIOM",lv:"C1",es:"Poner las cartas sobre la mesa",en:"To put your cards on the table.",ex:"Expectation-setting with a client."},
+{k:"PHRASE",lv:"B2",es:"Propongo cerrar este punto y avanzar.",en:"I suggest we wrap this up and move on.",ex:"Closing a long discussion."},
+{k:"IDIOM",lv:"C1",es:"Dar en el clavo",en:"To hit the nail on the head.",ex:"Praising a sharp insight in feedback."}];
+const _t=["meeting","client","email","negotiation","report","campaign","feedback","campaign","report","negotiation","meeting","feedback"];
+const PH=ACT.map((a,i)=>({...a,id:"a"+i,tags:[_t[i]]})).concat([
+{id:"x1",k:"PHRASE",lv:"B1",tags:["email"],es:"Adjunto el informe para tu revisión.",en:"Please find the report attached for your review.",ex:"Standard attachment line in an email."},
+{id:"x2",k:"PHRASE",lv:"B1",tags:["email"],es:"Quedo atento a tu respuesta.",en:"I look forward to hearing from you.",ex:"Polite email closing."},
+{id:"x3",k:"PHRASE",lv:"B2",tags:["client"],es:"Gracias por tu paciencia, ya tenemos novedades.",en:"Thanks for your patience, we have an update.",ex:"Client update after a delay."},
+{id:"x4",k:"PHRASE",lv:"B2",tags:["client"],es:"Nos gustaría alinear expectativas desde el inicio.",en:"We’d like to align expectations from the start.",ex:"Kick-off with a new client."},
+{id:"x5",k:"PHRASE",lv:"B2",tags:["meeting"],es:"¿Alguien quiere añadir algo antes de cerrar?",en:"Does anyone want to add anything before we close?",ex:"Ending a meeting."},
+{id:"x6",k:"PHRASE",lv:"B2",tags:["meeting"],es:"Lo dejamos aparcado y volvemos luego.",en:"Let’s park that and come back to it.",ex:"Off-topic point in a meeting."},
+{id:"x7",k:"PHRASE",lv:"B2",tags:["feedback"],es:"Me gustó mucho el enfoque; sugiero afinar el mensaje.",en:"I really liked the approach; I’d suggest tightening the message.",ex:"Balanced feedback."},
+{id:"x8",k:"PHRASE",lv:"B1",tags:["report"],es:"La tasa de conversión subió un 12 %.",en:"The conversion rate went up by 12%.",ex:"Reporting a KPI."},
+{id:"x9",k:"PHRASE",lv:"B2",tags:["negotiation"],es:"Es nuestra mejor oferta en este momento.",en:"That’s our best offer at this point.",ex:"Holding your position on price."},
+{id:"x10",k:"PHRASE",lv:"B1",tags:["campaign"],es:"Vamos a lanzar una prueba A/B.",en:"We’re going to run an A/B test.",ex:"Planning a campaign test."},
+{id:"x11",k:"PHRASE",lv:"B1",tags:["campaign"],es:"El alcance orgánico ha caído.",en:"Organic reach has dropped.",ex:"Social media review."}]);
+const TAGS=[["meeting",/reuni|meeting|call|llamada|videoconf/i],["email",/e-?mail|correo/i],["feedback",/feedback|review|evalua|revis/i],["client",/client|propuesta|proposal|pitch/i],["report",/informe|report|resultado|analytic|m[eé]trica|kpi/i],["negotiation",/presupuesto|budget|negoci|precio|price|contrato/i],["campaign",/campa|campaign|\bads\b|lanzamiento|launch/i]];
+function dayItems(d,dt){const e=epoch(dt),found=[],names=[];
+ d.tasks.filter(t=>!t.d).forEach(t=>TAGS.forEach(([g,r])=>{if(r.test(t.t)&&!found.includes(g)){found.push(g);names.push(t.t)}}));
+ const list=[];found.forEach(g=>{const c=PH.filter(p=>p.tags.includes(g)&&lvOk(p)),p=c[Math.abs(e)%c.length];if(p&&!list.includes(p))list.push(p)});
+ return list.length?{list:list.slice(0,3),ctx:names.slice(0,3).join(", ")}:{list:[pickLv(e)],ctx:""}}
+const INTV=[1,3,7,21],addD=n=>{const d=new Date();d.setDate(d.getDate()+n);return iso(d)};
+const inBook=id=>S.book.some(b=>b.id===id),dueList=()=>S.book.filter(b=>b.due<=iso(new Date()));
+function toggleBook(id){const i=S.book.findIndex(b=>b.id===id);if(i>=0)S.book.splice(i,1);else S.book.push({id,box:0,due:addD(1)});save()}
+const LV={B1:1,B2:2,C1:3},lvOk=p=>!S.lvl||LV[p.lv]<=LV[S.lvl];
+function pickLv(e){const pl=PH.filter(lvOk);return pl[((e%pl.length)+pl.length)%pl.length]}
+const MODES=[["phrase","Frases / Phrases"],["dialog","Diálogo / Dialogue"],["build","Construir / Build"],["word","Letras / Letters"],["quiz","Quiz"],["friends","Falsos amigos / False friends"],["reg","Registro / Register"]];
+const DLG=[
+{c:"Client call",q:["¿Podéis entregar el informe el viernes?","Can you deliver the report by Friday?"],o:[["Claro, lo tendréis el viernes a primera hora.","Sure, you’ll have it first thing on Friday.",1,"Clear, confident and professional."],["Ni de broma.","No way.",0,"Far too blunt for a client."],["Déjame ver y te cuento.","Let me check and get back to you.",2,"Safe, but vague. Use it only if you really must check."]]},
+{c:"Team meeting",q:["No estoy seguro de que esta campaña funcione.","I’m not sure this campaign will work."],o:[["Entiendo tu duda. ¿Qué datos te harían cambiar de opinión?","I see your concern. What data would change your mind?",1,"Constructive: it invites evidence."],["Estás equivocado.","You’re wrong.",0,"Confrontational, closes the discussion."],["Bueno, ya veremos.","Well, we’ll see.",2,"Avoids conflict but adds nothing."]]},
+{c:"Budget talk",q:["Nuestro presupuesto es limitado este trimestre.","Our budget is limited this quarter."],o:[["Lo entiendo. ¿Podemos priorizar lo esencial y ampliar después?","I understand. Can we prioritise the essentials and expand later?",1,"Flexible and solution-oriented."],["Entonces no hay trato.","Then there’s no deal.",0,"Ends the negotiation too early."],["Tendré que consultarlo con mi equipo.","I’ll need to check with my team.",2,"Acceptable way to buy time."]]},
+{c:"Feedback",q:["¿Qué te pareció mi presentación?","What did you think of my presentation?"],o:[["Muy clara. Yo reforzaría el cierre con una cifra.","Very clear. I’d strengthen the ending with a figure.",1,"Specific and balanced."],["Estuvo bien.","It was fine.",2,"Polite but unhelpful."],["Aburrida.","Boring.",0,"Harsh, with no useful detail."]]}];
+const FF=[["actually","en realidad, de hecho","actualmente","currently, at the moment","Actually, the launch is on Friday. / Actualmente trabajo en una agencia."],
+["embarrassed","avergonzado","embarazada","pregnant","I was embarrassed by the typo. / Mi compañera está embarazada."],
+["sensible","sensato, razonable","sensible","sensitive","That’s a sensible plan. / Es un tema muy sensible."],
+["eventually","al final, con el tiempo","eventualmente","occasionally, possibly","Eventually, we closed the deal. / Eventualmente hacemos eventos."],
+["assist","ayudar","asistir","to attend","Can you assist me? / Voy a asistir a la reunión."],
+["realize","darse cuenta","realizar","to carry out","I realized the data was wrong. / Vamos a realizar una auditoría."],
+["library","biblioteca","librería","bookshop","The library is quiet. / Compré el libro en la librería."],
+["argument","discusión (o argumento)","argumento","reasoning, plot","We had an argument about the budget. / Tu argumento es sólido."],
+["support","apoyar","soportar","to put up with","We support your idea. / No soporto las reuniones largas."],
+["attend","asistir a","atender","to serve, to handle","Please attend the kick-off. / Atiendo a clientes por la tarde."]];
+const REG=[["Pedir un informe / Asking for a report",["Could you please send me the report at your earliest convenience?","¿Podría enviarme el informe en cuanto le sea posible?"],["Could you send me the report today?","¿Me puedes enviar el informe hoy?"],["Send me the report when you can.","Pásame el informe cuando puedas."]],
+["Rechazar una reunión / Declining a meeting",["Unfortunately, I won’t be able to attend. Could we reschedule?","Lamentablemente no podré asistir. ¿Podríamos reprogramarla?"],["I can’t make it. Can we move it?","No puedo ir. ¿La movemos?"],["Can’t do it, sorry. Another day?","No puedo, perdona. ¿Otro día?"]],
+["Pedir más plazo / Asking for more time",["Would it be possible to extend the deadline by two days?","¿Sería posible ampliar el plazo dos días?"],["Can we push the deadline to Wednesday?","¿Podemos pasar la fecha límite al miércoles?"],["I need a couple more days.","Necesito un par de días más."]],
+["Discrepar / Disagreeing",["I see it slightly differently, if I may.","Si me permite, lo veo de forma algo distinta."],["I see it a bit differently.","Yo lo veo un poco distinto."],["Nah, I don’t buy it.","Pues no me convence."]]];
+var dN=0,dPick=-1,fN=0,rN=0,qz=null,qs=0,qt=0,bd=null,bs=0,bt=0;
+function newBuild(){const pl=PH.filter(lvOk),it=pl[Math.floor(Math.random()*pl.length)],dir=Math.random()<.5?"en":"es",tg=(dir==="en"?it.en:it.es).split(/\s+/);
+ bd={it,dir,tg,pool:shuffle(tg.map((w,i)=>({w,i}))),pl:[],st:0}}
+const WP=[
+{lg:"en",l:"SALES",w:[["SALE","venta"],["SALES","ventas"],["SEAL","sello"],["LESS","menos"]]},
+{lg:"en",l:"TRENDS",w:[["TREND","tendencia"],["TRENDS","tendencias"],["SEND","enviar"],["REST","descanso"],["TEND","tender a"]]},
+{lg:"en",l:"BRAND",w:[["BRAND","marca"],["BARN","granero"],["BRAN","salvado"]]},
+{lg:"en",l:"PITCH",w:[["PITCH","propuesta"],["CHIP","ficha"],["ITCH","picor"],["PIT","foso"]]},
+{lg:"en",l:"GOALS",w:[["GOALS","objetivos"],["GOAL","objetivo"],["LOGS","registros"]]},
+{lg:"es",l:"PLAZOS",w:[["PLAZO","deadline"],["PLAZOS","deadlines"],["LAZO","bow, tie"],["LAZOS","bows, ties"]]},
+{lg:"es",l:"TRATOS",w:[["TRATOS","deals"],["TRATO","deal"],["ASTRO","star"],["TORTA","cake"],["RATOS","moments"]]},
+{lg:"es",l:"REDES",w:[["REDES","networks"],["SEDE","headquarters"],["SED","thirst"],["ERES","you are"]]},
+{lg:"es",l:"METAS",w:[["METAS","goals"],["META","goal"],["TEMAS","topics"],["MESA","table"],["ESTA","this (f.)"]]},
+{lg:"es",l:"MARCAS",w:[["MARCAS","brands"],["MARCA","brand"],["RAMA","branch"],["ARMA","weapon"],["CAMAS","beds"]]}];
+var wh=null,ws=0,wt=0;
+function newWheel(){const pool=WP.filter(p=>!S.wl||p.lg===S.wl),p=pool[Math.floor(Math.random()*pool.length)];wh={lg:p.lg,l:shuffle([...p.l]),w:p.w.slice().sort((x,y)=>x[0].length-y[0].length),f:[],h:{},st:0}}
+function wheelUI(b){
+ if(!wh)newWheel();const n=wh.l.length,S0=240,R=S0/2-30,NS="http://www.w3.org/2000/svg";
+ b.append(el("span","k","WORDS \u00b7 "+ws+"/"+wt),el("p","",(wh.lg==="en"?"\ud83c\uddec\ud83c\udde7":"\ud83c\uddea\ud83c\uddf8")+" Une las letras para formar palabras / Connect the letters to form words"));
+ chips(b,[["","Aleatorio / Random"],["es","ES"],["en","EN"]],S.wl||"",v=>{S.wl=v;save();wh=null;render()});
+ const sl=el("div","wslots");
+ wh.w.forEach(([w,c])=>{const ok=wh.f.includes(w),r=el("div","wslot"+(wh.t===w&&!ok?" pick":"")),hc=wh.h[w]||0;r.style.cursor="pointer";r.onclick=()=>{wh.t=w;render()};[...w].forEach((ch,i)=>r.append(el("span","wc"+(ok?" on":i<hc?" hint":""),ok||i<hc?ch:"")));r.append(el("span","muted"," "+c));sl.append(r)});b.append(sl);
+ const bub=el("div","wbub","\u00a0"),wl=el("div","wheel"),svg=document.createElementNS(NS,"svg"),pl=document.createElementNS(NS,"polyline");
+ wl.style.width=wl.style.height=S0+"px";svg.setAttribute("viewBox","0 0 "+S0+" "+S0);svg.setAttribute("class","wsvg");pl.setAttribute("fill","none");svg.append(pl);wl.append(svg);
+ const pts=wh.l.map((ch,i)=>{const a=-Math.PI/2+i*2*Math.PI/n;return[S0/2+R*Math.cos(a),S0/2+R*Math.sin(a)]});
+ const els=wh.l.map((ch,i)=>{const x=el("div","wl",ch);x.style.left=(pts[i][0]-23)+"px";x.style.top=(pts[i][1]-23)+"px";wl.append(x);return x});
+ let path=[],drag=false;
+ const draw=(px,py)=>{const q=path.map(i=>pts[i][0]+","+pts[i][1]);if(px!=null&&path.length)q.push(px+","+py);pl.setAttribute("points",q.join(" "));els.forEach((x,i)=>x.classList.toggle("on",path.includes(i)));bub.textContent=path.length?path.map(i=>wh.l[i]).join(""):"\u00a0"};
+ const at=e=>{const r=wl.getBoundingClientRect(),sc=S0/(r.width||S0);return[(e.clientX-r.left)*sc,(e.clientY-r.top)*sc]};
+ const hit=(x,y)=>pts.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)<27);
+ wl.addEventListener("pointerdown",e=>{if(wh.st)return;const[x,y]=at(e),i=hit(x,y);if(i<0)return;drag=true;try{wl.setPointerCapture(e.pointerId)}catch(_){}path=[i];draw(x,y);e.preventDefault()});
+ wl.addEventListener("pointermove",e=>{if(!drag)return;const[x,y]=at(e),i=hit(x,y);if(i>=0){if(path.length>1&&i===path[path.length-2])path.pop();else if(!path.includes(i))path.push(i)}draw(x,y)});
+ const end=()=>{if(!drag)return;drag=false;const w=path.map(i=>wh.l[i]).join("");path=[];
+  const f=wh.w.find(z=>z[0]===w);
+  if(f&&!wh.f.includes(w)){wh.f.push(w);if(wh.f.length===wh.w.length){wh.st=1;ws++;wt++;day(sel).lang=true;save()}render();setTimeout(()=>{const g=$(".wheel");if(g)burst(g)},60)}
+  else{bub.textContent=w.length>1?w:"\u00a0";bub.classList.add("wrong");pl.setAttribute("points","");els.forEach(x=>x.classList.remove("on"));setTimeout(()=>{bub.classList.remove("wrong");bub.textContent="\u00a0"},450)}};
+ wl.addEventListener("pointerup",end);wl.addEventListener("pointercancel",()=>{drag=false;path=[];draw()});
+ b.append(bub,wl);
+ if(wh.st===1)b.append(el("p","","\ud83c\udf89 \u00a1Completado! / Completed!"));
+ else b.append(el("p","muted",wh.f.length+"/"+wh.w.length+" \u00b7 Retrocede para quitar la \u00faltima letra / Drag back to undo the last letter"));
+ if(wh.st!==1){nextBtn(b,"Pista / Hint",()=>{const w=wh.w.find(z=>z[0]===wh.t&&!wh.f.includes(z[0]))||wh.w.find(z=>!wh.f.includes(z[0]));if(!w)return;const k=(wh.h[w[0]]||0)+1;wh.h[w[0]]=k;if(k>=w[0].length){wh.f.push(w[0]);if(wh.f.length===wh.w.length){wh.st=1;day(sel).lang=true;save()}}render()});nextBtn(b,"Mezclar / Shuffle",()=>{wh.l=shuffle(wh.l);render()})}
+ nextBtn(b,wh.st?"Otro c\u00edrculo / Next":"Saltar / Skip",()=>{if(!wh.st)wt++;wh=null;render()})}
+function chips(L,items,cur,on){const w=el("div","chips");items.forEach(([v,t])=>{const b=el("button","chip"+(v===cur?" on":""),t);b.type="button";b.onclick=()=>on(v);w.append(b)});L.append(w)}
+function nextBtn(b,t,f){const x=el("button","dark-go",t);x.style.marginTop="8px";x.onclick=f;b.append(x)}
+function LM(L){const m=S.lm||"phrase";
+ chips(L,MODES,m,v=>{S.lm=v;save();qz=null;dPick=-1;render()});
+ chips(L,[["","Todos / All"],["B1","B1"],["B2","B2"],["C1","C1"]],S.lvl||"",v=>{S.lvl=v;save();qz=null;bd=null;render()});
+ const e=Math.abs(epoch(parse(sel))),b=el("div","ph");
+ if(m==="dialog"){const q=DLG[(e+dN)%DLG.length];b.append(el("span","k","DIALOGUE · "+q.c),el("p","","🇬🇧 "+q.q[1]),el("p","","🇪🇸 "+q.q[0]),el("p","muted","Elige tu respuesta / Choose your reply:"));
+  q.o.forEach((o,i)=>{const x=el("button","rev",o[1]+"  /  "+o[0]);x.style.marginBottom="6px";x.onclick=()=>{dPick=i;render()};b.append(x);
+   if(dPick===i)b.append(el("div","",(o[2]===1?"✅ Best: ":o[2]===2?"👌 OK: ":"⚠️ Risky: ")+o[3]))});
+  nextBtn(b,"Otro diálogo / Next",()=>{dN++;dPick=-1;render()})}
+ else if(m==="build"){if(!bd)newBuild();
+  const f1=bd.dir==="en"?"🇪🇸 ":"🇬🇧 ",f2=bd.dir==="en"?"🇬🇧 ":"🇪🇸 ",src=bd.dir==="en"?bd.it.es:bd.it.en;
+  b.append(el("span","k","BUILD · "+bs+"/"+bt),el("p","",f1+src),el("p","muted",f2+"Ordena los bloques / Arrange the tiles:"));
+  const ans=el("div","ans");bd.pl.forEach((t,j)=>{const x=el("button","tile",t.w);x.onclick=()=>{if(bd.st===1)return;bd.pool.push(...bd.pl.splice(j,1));bd.st=0;render()};ans.append(x)});b.append(ans);
+  const tl=el("div");bd.pool.forEach((t,j)=>{const x=el("button","tile",t.w);x.onclick=()=>{if(bd.st===1)return;bd.pl.push(...bd.pool.splice(j,1));
+   if(!bd.pool.length){const ok=bd.pl.map(z=>z.w).join(" ")===bd.tg.join(" ");bt++;if(ok){bs++;bd.st=1;day(sel).lang=true;save();setTimeout(()=>{const g=$(".ans");if(g)burst(g)},80)}else bd.st=2}render()};tl.append(x)});b.append(tl);
+  if(bd.st===1)b.append(el("p","","✅ ¡Perfecto! / Perfect!"),el("p","muted","Contexto: "+bd.it.ex));
+  if(bd.st===2)b.append(el("p","","⚠️ Casi. Toca un bloque para quitarlo. / Almost. Tap a tile to remove it."));
+  if(bd.st!==1)nextBtn(b,"Pista / Hint",()=>{let k=0;while(k<bd.pl.length&&bd.pl[k].w===bd.tg[k])k++;bd.pool.push(...bd.pl.splice(k));const j=bd.pool.findIndex(t=>t.w===bd.tg[k]);if(j>=0)bd.pl.push(...bd.pool.splice(j,1));bd.st=bd.pool.length?0:1;render()});
+  nextBtn(b,"Otra frase / Next",()=>{bd=null;render()})}
+ else if(m==="word")wheelUI(b);
+ else if(m==="quiz"){if(!qz){const pl=PH.filter(lvOk),it=pl[Math.floor(Math.random()*pl.length)],ds=pl.filter(p=>p!==it).sort(()=>Math.random()-.5).slice(0,2);qz={it,o:[it,...ds].sort(()=>Math.random()-.5),p:-1}}
+  b.append(el("span","k","QUIZ · "+qs+"/"+qt),el("p","","🇪🇸 "+qz.it.es),el("p","muted","¿Cuál es la traducción? / Which is the translation?"));
+  qz.o.forEach((o,i)=>{const x=el("button","rev"+(qz.p>=0&&o===qz.it?" qok":""),o.en);x.style.marginBottom="6px";
+   if(qz.p>=0){if(o===qz.it)x.style.background="#c8f2d4";else if(i===qz.p)x.style.background="#ffd0c8"}
+   x.onclick=()=>{if(qz.p>=0)return;qz.p=i;qt++;if(o===qz.it){qs++;setTimeout(()=>{const g=$(".qok");if(g)burst(g)},80)}render()};b.append(x)});
+  nextBtn(b,qz.p>=0?"Siguiente / Next":"Saltar / Skip",()=>{qz=null;render()})}
+ else if(m==="friends"){const f=FF[(e+fN)%FF.length];b.append(el("span","k","FALSE FRIENDS"),el("h3","",f[0]+"  ≠  "+f[2]),el("p","","🇬🇧 "+f[0]+" = "+f[1]),el("p","","🇪🇸 "+f[2]+" = "+f[3]),el("p","muted",f[4]));
+  nextBtn(b,"Otro / Next",()=>{fN++;render()})}
+ else if(m==="reg"){const r=REG[(e+rN)%REG.length];b.append(el("span","k","REGISTER"),el("p","",r[0]));
+  [["Formal","(cliente nuevo, dirección)"],["Neutral / Neutro","(equipo, clientes habituales)"],["Casual / Informal","(compañeros cercanos, Slack)"]].forEach(([t,w],i)=>{const c=el("div","rv");c.append(el("strong","",t),el("span","muted"," "+w),el("div","","🇬🇧 "+r[i+1][0]),el("div","","🇪🇸 "+r[i+1][1]));b.append(c)});
+  nextBtn(b,"Otra situación / Next",()=>{rN++;render()})}
+ if(m!=="phrase")L.append(b)}
+const CH="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@%&?!";const mask=t=>t.replace(/\S/g,()=>CH[Math.floor(Math.random()*CH.length)]);
+setInterval(()=>{if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;document.querySelectorAll(".rev.hid[data-t]").forEach(b=>{b.textContent=b.dataset.p+mask(b.dataset.t)})},110);
+function typeInto(b,pre,t){b.classList.remove("hid");if(matchMedia("(prefers-reduced-motion:reduce)").matches){b.textContent=pre+t;return}let i=0;const h=setInterval(()=>{i++;b.textContent=pre+t.slice(0,i)+(i<t.length?"▌":"");if(i>=t.length||!b.isConnected)clearInterval(h)},35)}
+var pz={};
+function shuffle(a){let b;do{b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}}while(a.length>1&&b.every((x,i)=>x===a[i]));return b}
+function phraseCard(it){
+ const key=sel+it.id,box=el("div","ph"),dir=(it.id.charCodeAt(it.id.length-1)+it.id.length)%2?"en":"es",
+  src=dir==="en"?it.es:it.en,tgt=dir==="en"?it.en:it.es,fs=dir==="en"?"🇪🇸 ":"🇬🇧 ",ft=dir==="en"?"🇬🇧 ":"🇪🇸 ";
+ box.append(el("span","k",it.k+" · "+it.lv),el("p","",fs+src));
+ let z=pz[key];if(!z){const tg=tgt.split(/\s+/);z=pz[key]={tg,pool:shuffle(tg.map(w=>({w}))),pl:[],st:0,fresh:false}}
+ if(z.st===1){const r=el("div","rev",ft+(z.fresh?"":tgt));r.style.cursor="default";r.dataset.k=key;box.append(r);if(z.fresh){z.fresh=false;typeInto(r,ft,tgt)}}
+ else{
+  const ans=el("div","ans");
+  if(!z.pl.length)ans.append(el("span","muted",ft+"Toca los bloques en orden / Tap the tiles in order"));
+  z.pl.forEach((t,j)=>{const x=el("button","tile on",t.w);x.type="button";x.onclick=()=>{z.pool.push(...z.pl.splice(j,1));render()};ans.append(x)});box.append(ans);
+  const tl=el("div");z.pool.forEach((t,j)=>{const x=el("button","tile",t.w);x.type="button";x.onclick=()=>{z.pl.push(...z.pool.splice(j,1));
+   if(!z.pool.length&&z.pl.map(q=>q.w).join(" ")===z.tg.join(" ")){z.st=1;z.fresh=true;day(sel).lang=true;save();setTimeout(()=>{const g=document.querySelector('.rev[data-k="'+key+'"]');if(g)burst(g)},150)}
+   render()};tl.append(x)});box.append(tl);
+  if(!z.pool.length)box.append(el("p","","⚠️ Casi. Toca un bloque para quitarlo. / Almost. Tap a tile to remove it."));
+  const sh=el("button","p","Mostrar / Show");sh.type="button";sh.onclick=()=>{z.st=1;z.fresh=true;render()};box.append(sh)}
+ const st=el("button","p",inBook(it.id)?"⭐ Guardada / Saved":"☆ Guardar / Save");st.type="button";st.style.marginLeft="8px";st.onclick=()=>{toggleBook(it.id);render()};
+ box.append(st,el("div","muted","Contexto: "+it.ex));return box}
+var revShown=false;
+function review(a){
+ const c=el("div","lang"),due=dueList();c.append(el("h3","","Repaso / Review"));
+ if(!S.book.length)c.append(el("p","","Guarda frases con ☆ en XPRESSO y volverán aquí a los 1, 3, 7 y 21 días. / Save phrases with ☆ and they come back after 1, 3, 7 and 21 days."));
+ else if(!due.length)c.append(el("p","","Nada pendiente hoy. / Nothing due today."));
+ else{const b=due[0],it=findItem(b.id);c.append(el("p","muted","Pendientes / Due: "+due.length));
+  const r1=el("div","prow");r1.append(el("div","rev","🇪🇸 "+it.es));c.append(r1);
+  const r2=el("div","prow"),rv=el("button","rev"+(revShown?"":" hid"),"🇬🇧 "+(revShown?it.en:mask(it.en)));
+  rv.dataset.p="🇬🇧 ";rv.dataset.t=it.en;rv.onclick=()=>{revShown=!revShown;if(revShown)typeInto(rv,"🇬🇧 ",it.en);else{rv.classList.add("hid");rv.textContent="🇬🇧 "+mask(it.en)}};r2.append(rv);r2.style.marginTop="8px";c.append(r2);
+  const g=up=>()=>{if(up){b.box=Math.min(b.box+1,INTV.length-1);b.due=addD(INTV[b.box])}else{b.box=0;b.due=addD(1)}revShown=false;save();render()};
+  const ag=el("button","dark-go","Otra vez / Again"),ok=el("button","dark-go","Lo sabía / Got it"),bx=el("div");ag.onclick=g(0);ok.onclick=g(1);bx.style.marginTop="12px";bx.append(ag,ok);c.append(bx)}
+ a.append(c);
+ if(S.book.length){const l=el("div","card");l.append(el("h3","","Mi cuaderno / My phrasebook ("+S.book.length+")"));
+  S.book.forEach(b=>{const it=findItem(b.id);if(!it)return;const r=el("div","row");r.append(el("span","",it.es+"  /  "+it.en),el("span","muted","Box "+(b.box+1)));
+   const x=el("button","p","✕");x.onclick=()=>{toggleBook(b.id);render()};r.append(x);l.append(r)});a.append(l)}}
+const $=s=>document.querySelector(s);
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const parse=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
+const epoch=d=>Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);
+let S={mode:"cal",start:iso(new Date()),days:{}};
+try{const r=localStorage.getItem("xp365");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+if(!S.habits)S.habits=HABITS.slice();if(!S.hide)S.hide={};if(!S.book)S.book=[];S.focus=true;if(!S.order||S.order.length<4)S.order=["plan","lang","notes","habits"];if(S.ov!==2){if(JSON.stringify(S.order)===JSON.stringify(["plan","notes","habits","lang"]))S.order=["plan","lang","notes","habits"];S.ov=2}if(!S.order.includes("hours"))S.order.splice(S.order.indexOf("plan")+1,0,"hours");if(!S.order.includes("wod")){const li=S.order.indexOf("lang");S.order.splice(li<0?S.order.length:li+1,0,"wod")}
+const save=()=>{try{localStorage.setItem("xp365",JSON.stringify(S))}catch(e){}};
+let tab="year",cur=new Date(),sel=iso(new Date()),shown={};
+const day=k=>S.days[k]||(S.days[k]={tasks:[],note:"",hab:{},lang:false});
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+function dayInfo(d){
+ if(S.mode==="roll"){const n=epoch(d)-epoch(parse(S.start))+1;return{n,inside:n>=1&&n<=365}}
+ const n=Math.round((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(d.getFullYear(),0,0))/864e5);return{n,inside:true}}
+let lastV="";
+const AB2=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"],AE=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+function monthTabs(){const b1=document.querySelector("#mt .mtin"),b2=document.querySelector("#mt2 .mtin");if(!b1||!b2)return;b1.textContent="";b2.textContent="";
+ const base=S.mode==="roll"?parse(S.start):new Date(cur.getFullYear(),0,1);
+ for(let i=0;i<12;i++){const d=new Date(base.getFullYear(),base.getMonth()+i,1),m=d.getMonth(),y=d.getFullYear(),on=m===cur.getMonth()&&y===cur.getFullYear();
+  const mk=vis=>{const b=el("button","mtab"+(on?" on":"")+(vis?"":" hid"));b.style.background="color-mix(in srgb,var(--acc) "+(100-i*3)+"%,var(--bg))";
+   b.append(el("span","",AB2[m]));if(AB2[m]!==AE[m])b.append(el("span","",AE[m]));
+   b.title=MES[m]+" / "+MON[m]+" "+y;b.type="button";if(vis)b.setAttribute("aria-label",b.title);else{b.tabIndex=-1;b.setAttribute("aria-hidden","true")}
+   b.onclick=()=>{cur=new Date(y,m,1);tab="month";render()};return b};
+  b1.append(mk(!on));b2.append(mk(on))}}
+function fitYear(){const c=document.querySelector(".ycard"),g=c&&c.querySelector(".ygrid");if(!g)return;
+ if(!document.body.classList.contains("focus")){g.style.gridTemplateColumns="";g.style.gridTemplateRows="";g.style.removeProperty("--yf");return}
+ const aw=g.clientWidth,ah=g.clientHeight||window.innerHeight-g.getBoundingClientRect().top-24;if(aw<150||ah<150)return;
+ let best=null;[[3,4],[4,3],[2,6],[6,2],[12,1],[1,12]].forEach(([cn,rn])=>{const mw=(aw-10*(cn-1))/cn,mh=(ah-10*(rn-1))/rn,cw=(mw-14)/7,ch=(mh-52)/6,sc=Math.min(cw,ch);if(!best||sc>best.sc)best={cn,rn,sc}});
+ g.style.gridTemplateColumns="repeat("+best.cn+",minmax(0,1fr))";g.style.gridTemplateRows="repeat("+best.rn+",minmax(0,1fr))";g.style.setProperty("--yf",Math.max(7,Math.min(20,Math.floor(best.sc*.55)))+"px")}
+function fitTabs(){const root=document.documentElement,mt=document.querySelector("#mt"),bk=document.querySelector(".book");if(!mt||!bk)return;
+ const top=mt.getBoundingClientRect().top,bottom=Math.min(bk.getBoundingClientRect().bottom,window.innerHeight-6),th=(bottom-top-33)/12;
+ if(th>=20&&th<=90)root.style.setProperty("--th",th+"px");else root.style.removeProperty("--th")}
+function fitGrid(){const root=document.documentElement,g=document.querySelector(".mcard .grid");
+ if(!g)return;
+ const foc=document.body.classList.contains("focus"),rows=+g.style.getPropertyValue("--rows")||6,port=window.innerHeight>window.innerWidth,mode=foc&&port?(S.pl==="week"?"tr":"fl"):"std";
+ g.classList.toggle("tr",mode==="tr");g.classList.toggle("fl",mode==="fl");
+ if(foc){const p=g.parentElement,cs=getComputedStyle(p),aw=p.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),ah=window.innerHeight-g.getBoundingClientRect().top-8;
+  if(aw>=100&&ah>=150){let sz;
+   if(mode==="tr"){sz=Math.floor(Math.min((aw-22-3*rows)/rows,(ah-18)/7));g.style.width=(22+rows*sz+3*rows)+"px";g.style.gridTemplateColumns="22px repeat("+rows+","+sz+"px)";g.style.gridTemplateRows="repeat(7,"+sz+"px)"}
+   else if(mode==="fl"){const n=g.querySelectorAll(".cell").length;let best=0,bc=7;for(let c=3;c<=7;c++){const r=Math.ceil(n/c),z=Math.floor(Math.min((aw-3*(c-1))/c,(ah-3*(r-1))/r));if(z>best){best=z;bc=c}}
+    sz=best;const r=Math.ceil(n/bc);g.style.width=(bc*sz+3*(bc-1))+"px";g.style.gridTemplateColumns="repeat("+bc+","+sz+"px)";g.style.gridTemplateRows="repeat("+r+","+sz+"px)"}
+   else{sz=Math.floor(Math.min((aw-18)/7,(ah-20-3*rows-3)/rows));g.style.width=(sz*7+18)+"px";g.style.gridTemplateColumns="";g.style.gridTemplateRows="auto repeat("+rows+","+sz+"px)"}
+   root.style.setProperty("--cs",sz+"px");root.classList.toggle("cellbig",sz>=76)}}
+ else{g.style.width="";g.style.gridTemplateRows="";g.style.gridTemplateColumns="";const c=g.querySelector(".cell");if(c&&c.offsetWidth){root.style.setProperty("--cs",c.offsetWidth+"px");root.classList.toggle("cellbig",c.offsetWidth>=76)}}
+ const ag=document.querySelector(".mcard .agenda");if(ag){if(foc){const left=window.innerHeight-g.getBoundingClientRect().bottom-14;if(left>=150){ag.style.display="flex";ag.style.height=left+"px"}else ag.style.display="none"}else{ag.style.display="";ag.style.height=""}}
+}
+window.addEventListener("resize",()=>{fitGrid();fitYear();fitTabs()});
+function render(){const vk=tab+(tab==="day"?sel:""),goTop=vk!==lastV;lastV=vk;document.body.classList.toggle("focus",!!S.focus);
+ document.querySelectorAll("#mode button").forEach(b=>b.classList.toggle("on",b.dataset.m===S.mode));
+ document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+ {const rb=document.querySelector('#tabs [data-t="review"]'),n=dueList().length;if(rb)rb.textContent="Repaso / Review"+(n?" ("+n+")":"")}
+ monthTabs();const a=$("#app");a.textContent="";
+ (tab==="year"?yearView:tab==="month"?month:tab==="day"?dayView:tab==="review"?review:data)(a);if(goTop){window.scrollTo(0,0);document.querySelector("header").scrollIntoView({block:"start"})}fitGrid();fitYear();fitTabs()}
+function yearView(a){
+ const base=S.mode==="roll"?parse(S.start):new Date(cur.getFullYear(),0,1),c=el("div","card ycard"),nav=el("div","nav"),today=iso(new Date());
+ const p=el("button","ib","‹"),n=el("button","ib","›");p.setAttribute("aria-label","Previous year");n.setAttribute("aria-label","Next year");
+ const sh=k=>()=>{cur=new Date(cur.getFullYear()+k,0,1);render()};p.onclick=sh(-1);n.onclick=sh(1);
+ if(S.mode==="roll")nav.append(el("span"),el("h2","","Rolling 365 · "+S.start),el("span"));else nav.append(p,el("h2","",String(base.getFullYear())),n);
+ c.append(nav);const g=el("div","ygrid");
+ for(let i=0;i<12;i++){const d0=new Date(base.getFullYear(),base.getMonth()+i,1),m=d0.getMonth(),y=d0.getFullYear(),box=el("div","ymon"),h=el("button","ytit",AB2[m]===AE[m]?AB2[m]:AB2[m]+" · "+AE[m]);
+  box.onclick=()=>{cur=new Date(y,m,1);tab="month";render()};box.style.cursor="pointer";
+  const mg=el("div","ymg");DOW.forEach(x=>mg.append(el("span","ydow",x)));
+  const first=(new Date(y,m,1).getDay()+6)%7,total=new Date(y,m+1,0).getDate();
+  for(let k=0;k<first;k++)mg.append(el("span"));
+  for(let dd=1;dd<=total;dd++){const dt=new Date(y,m,dd),key=iso(dt),rec=S.days[key],b=el("button","yd"+(key===today?" today":"")+(rec&&rec.tasks.length?" has":"")+(rec&&rec.tasks.some(t=>t.p&&!t.d)?" imp":"")+(dt.getDay()===0||dt.getDay()===6?" we":""),dd);
+   mg.append(b)}
+  box.append(h,mg);g.append(box)}
+ c.append(g);a.append(c)}
+function month(a){
+ const y=cur.getFullYear(),m=cur.getMonth(),c=el("div","card mcard"),nav=el("div","nav");
+ const p=el("button","ib","‹"),n=el("button","ib","›");p.setAttribute("aria-label","Previous month");n.setAttribute("aria-label","Next month");
+ p.onclick=()=>{cur=new Date(y,m-1,1);render()};n.onclick=()=>{cur=new Date(y,m+1,1);render()};
+ nav.append(p,el("h2","",MES[m]+" / "+MON[m]+" "+y),n);c.append(nav);
+ const g=el("div","grid");DOW.forEach(d=>g.append(el("div","dow",d)));
+ const first=(new Date(y,m,1).getDay()+6)%7,total=new Date(y,m+1,0).getDate(),today=iso(new Date());g.style.setProperty("--rows",Math.ceil((first+total)/7));
+ for(let i=0;i<first;i++)g.append(el("div"));
+ for(let d=1;d<=total;d++){const dt=new Date(y,m,d),k=iso(dt),info=dayInfo(dt),dd=S.days[k];
+  const b=el("button","cell"+(k===today?" today":"")+(info.inside?"":" out")+(dt.getDay()%6===0?" we":""));b.dataset.wd=DOW[(dt.getDay()+6)%7];
+  b.append(el("span","",d));
+  if(S.mode==="roll"&&info.inside)b.append(el("small","","D"+info.n));
+  if(k===sel)b.classList.add("sel");
+  const dots=el("div","dots");
+  if(dd){const ts=sorted(dd.tasks);ts.slice(0,3).forEach(t=>b.append(el("div","ev"+(t.p?" h":"")+(t.d?" x":""),(t.h?t.h+" ":"")+t.t)));
+   if(ts.length>3)b.append(el("small","","+"+(ts.length-3)));
+   ts.forEach(()=>dots.append(el("i")));if(dd.lang)dots.append(el("i","l"))}
+  b.append(dots);b.onclick=()=>{sel=k;tab="day";render()};g.append(b)}
+ c.append(g);
+ const ag=el("div","agenda"),list=el("div","alist");let any=false;ag.append(el("h3","","Agenda del mes / Month agenda"));
+ for(let d=1;d<=total;d++){const k=iso(new Date(y,m,d)),rec=S.days[k];if(!rec||!rec.tasks.length)continue;
+  sorted(rec.tasks).forEach(t=>{any=true;const r=el("button","arow"+(t.p&&!t.d?" h":"")+(t.d?" x":""));r.type="button";r.append(el("b","",d+" "+AB2[m]),el("span","t",t.h||"--:--"),el("span","",t.t));r.onclick=()=>{sel=k;tab="day";render()};list.append(r)})}
+ if(!any)list.append(el("p","muted","Sin tareas este mes. Añade una abajo. / No tasks this month. Add one below."));
+ ag.append(list);
+ const af=el("div","add"),ad=document.createElement("input"),at=document.createElement("input"),ai=document.createElement("input"),ab=el("button","go","Add");
+ ad.type="date";ad.value=sel.slice(0,7)===iso(new Date(y,m,1)).slice(0,7)?sel:iso(new Date(y,m,1));at.type="time";at.style.cssText="flex:0 0 110px;width:110px";ai.placeholder="Nueva tarea / New task";ai.style.cssText="flex:1 1 140px;width:auto";
+ const ago=()=>{const v=ai.value.trim();if(v&&ad.value){day(ad.value).tasks.push({t:v,h:at.value,p:0,d:false});save();render()}};ab.onclick=ago;ai.onkeydown=e=>{if(e.key==="Enter")ago()};
+ af.append(ad,at,ai,ab);ag.append(af);c.append(ag);a.append(c);
+ const h=el("div","card hint");h.append(el("p","muted","Toca un día para abrirlo. Los puntos y etiquetas muestran lo que tienes planeado. / Tap a day to open it. Dots and labels show what you have planned."));a.append(h)}
+const sorted=ts=>ts.slice().sort((x,y)=>(x.h||"99:99").localeCompare(y.h||"99:99"));
+function taskList(d){
+ const w=el("div");
+ if(!d.tasks.length)w.append(el("p","muted","Nada planeado. Escribe abajo, con hora si quieres. / Nothing planned. Type below, time is optional."));
+ sorted(d.tasks).forEach(t=>{const r=el("div","row"+(t.p&&!t.d?" hi":"")),cb=document.createElement("input");cb.type="checkbox";cb.checked=t.d;
+  cb.onchange=()=>{t.d=cb.checked;save();render()};
+  const s=el("span",t.d?"done":"",(t.h?t.h+"  ":"")+t.t),pb=el("button","p"+(t.p?" h":""),t.p?"High":"Normal");
+  pb.onclick=()=>{t.p=t.p?0:1;save();render()};
+  const x=el("button","p","✕");x.setAttribute("aria-label","Delete task");x.onclick=()=>{d.tasks.splice(d.tasks.indexOf(t),1);save();render()};
+  r.append(cb,s,pb,x);w.append(r)});
+ const f=el("div","add"),tm=document.createElement("input");tm.type="time";tm.style.cssText="flex:0 0 120px;width:120px";tm.setAttribute("aria-label","Time (optional)");
+ const inp=document.createElement("input");inp.placeholder="Nueva tarea o evento / New task or event";inp.style.cssText="flex:1 1 160px;width:auto";
+ const add=el("button","go","Add");const go=()=>{const v=inp.value.trim();if(v){d.tasks.push({t:v,h:tm.value,p:0,d:false});save();render()}};
+ add.onclick=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};f.append(tm,inp,add);w.append(f);return w}
+var langOpen=false,habEdit=-1;
+const SEC={plan:"Plan del día / Day plan",hours:"Horario / Schedule",wod:"Palabra del d\u00eda / Word of the day",notes:"Notas / Notes",habits:"Hábitos / Habits",lang:"XPRESSO"};
+function put(a,key,card,host){if(S.hide[key])return;const b=el("button","p hd","👁");b.type="button";b.title="Ocultar / Hide";b.setAttribute("aria-label","Ocultar / Hide");
+ b.onclick=e=>{e.preventDefault();e.stopPropagation();S.hide[key]=true;save();render()};card.style.position="relative";(host||card).append(b);(a._s=a._s||{})[key]={card,host:host||card}}
+function restore(a){const s=a._s||{};a._s={};const ord=S.order.filter(k=>s[k]);
+ ord.forEach((k,i)=>{const m=el("span","mv"),mv=dir=>e=>{e.preventDefault();e.stopPropagation();const x=S.order.indexOf(k),y=S.order.indexOf(ord[i+dir]);[S.order[x],S.order[y]]=[S.order[y],S.order[x]];save();render()};
+  const u=el("button","p","↑"),w=el("button","p","↓");u.type=w.type="button";u.setAttribute("aria-label","Move up");w.setAttribute("aria-label","Move down");
+  u.disabled=i===0;w.disabled=i===ord.length-1;u.onclick=mv(-1);w.onclick=mv(1);m.append(u,w);s[k].host.append(m);a.append(s[k].card)});
+ const h=Object.keys(SEC).filter(k=>S.hide[k]);if(!h.length)return;
+ const c=el("div","card");c.append(el("p","muted","Secciones ocultas, toca para mostrar / Hidden sections, tap to show:"));const w=el("div","hab");
+ h.forEach(k=>{const b=el("button","p","+ "+SEC[k]);b.onclick=()=>{S.hide[k]=false;save();render()};w.append(b)});c.append(w);a.append(c)}
+function burst(n){
+ if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+ n.animate([{transform:"scale(1)"},{transform:"scale(1.15) rotate(-2deg)"},{transform:"scale(1)"}],{duration:380});
+ const r=n.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,cs=getComputedStyle(document.documentElement),cols=[cs.getPropertyValue("--acc"),cs.getPropertyValue("--num")||cs.getPropertyValue("--bg"),cs.getPropertyValue("--hi"),"#2fb67c"];
+ for(let i=0;i<18;i++){const p=document.createElement("i");
+  p.style.cssText="position:fixed;z-index:99;pointer-events:none;width:8px;height:8px;border-radius:"+(i%2?"50%":"2px")+";background:"+cols[i%4]+";left:"+cx+"px;top:"+cy+"px";
+  document.body.append(p);const g=Math.random()*6.283,m=50+Math.random()*70;
+  p.animate([{transform:"translate(0,0) scale(1)",opacity:1},{transform:"translate("+Math.cos(g)*m+"px,"+(Math.sin(g)*m-25)+"px) scale(.4) rotate(260deg)",opacity:0}],{duration:700+Math.random()*300,easing:"cubic-bezier(.2,.7,.3,1)"}).onfinish=()=>p.remove()}}
+const WD=[{id:"w1",lv:"B2",en:"leverage",es:"aprovechar",pos:"verbo / verb",x:["We can leverage our existing audience.","Podemos aprovechar nuestra audiencia actual."],n:"Muy frecuente en marketing. / Very common in marketing."},
+{id:"w2",lv:"B1",en:"deadline",es:"plazo",pos:"sustantivo / noun",x:["The deadline is Friday at noon.","El plazo termina el viernes al mediodía."],n:"También se dice «fecha límite». / Also «fecha límite»."},
+{id:"w3",lv:"C1",en:"outreach",es:"difusión",pos:"sustantivo / noun",x:["Our outreach campaign starts next week.","Nuestra campaña de difusión empieza la próxima semana."],n:"Contacto activo con una audiencia. / Active contact with an audience."},
+{id:"w4",lv:"C1",en:"bandwidth",es:"capacidad",pos:"sustantivo / noun",x:["I don't have the bandwidth for another project.","No tengo capacidad para otro proyecto más."],n:"Informal: tiempo y energía. / Informal: time and energy."},
+{id:"w5",lv:"B2",en:"to roll out",es:"desplegar",pos:"verbo / verb",x:["We will roll out the new feature in May.","Desplegaremos la nueva función en mayo."],n:"Lanzar por fases. / Launch in phases."},
+{id:"w6",lv:"B2",en:"stakeholder",es:"parte interesada",pos:"sustantivo / noun",x:["Keep every stakeholder informed.","Mantén informada a cada parte interesada."],n:"Quien tiene interés en el proyecto. / Anyone with a stake in the project."},
+{id:"w7",lv:"B2",en:"benchmark",es:"referencia",pos:"sustantivo / noun",x:["Use last quarter as a benchmark.","Usa el trimestre pasado como referencia."],n:"Punto de comparación. / A point of comparison."},
+{id:"w8",lv:"C1",en:"pitfall",es:"escollo",pos:"sustantivo / noun",x:["Avoid the common pitfalls of cold emails.","Evita los escollos habituales de los correos en frío."],n:"Un peligro oculto. / A hidden danger."},
+{id:"w9",lv:"B2",en:"touchpoint",es:"punto de contacto",pos:"sustantivo / noun",x:["Each touchpoint shapes the customer experience.","Cada punto de contacto moldea la experiencia del cliente."],n:"Cualquier interacción con la marca. / Any interaction with the brand."},
+{id:"w10",lv:"B1",en:"follow-up",es:"seguimiento",pos:"sustantivo / noun",x:["I'll send a follow-up tomorrow.","Mañana enviaré un seguimiento."],n:"No confundir con «seguir» (to follow). / Not the same as «seguir»."},
+{id:"w11",lv:"B2",en:"to tackle",es:"abordar",pos:"verbo / verb",x:["Let's tackle the budget first.","Abordemos primero el presupuesto."],n:"Enfrentar un problema con decisión. / Face a problem decisively."},
+{id:"w12",lv:"B2",en:"takeaway",es:"conclusión clave",pos:"sustantivo / noun",x:["The main takeaway is simple: test early.","La conclusión clave es simple: prueba pronto."],n:"También significa «comida para llevar». / Also means «comida para llevar»."},
+{id:"w13",lv:"B2",en:"hurdle",es:"obstáculo",pos:"sustantivo / noun",x:["Legal approval is the last hurdle.","La aprobación legal es el último obstáculo."],n:"Literalmente, la valla de una carrera. / Literally, a race barrier."},
+{id:"w14",lv:"C1",en:"to streamline",es:"agilizar",pos:"verbo / verb",x:["We streamlined the approval process.","Agilizamos el proceso de aprobación."],n:"Hacer algo más simple y rápido. / Make something simpler and faster."},
+{id:"w15",lv:"B2",en:"to flag",es:"señalar",pos:"verbo / verb",x:["Please flag any risks early.","Señala cualquier riesgo cuanto antes."],n:"Avisar de un asunto importante. / Raise an important issue."},
+{id:"w16",lv:"C1",en:"ballpark figure",es:"cifra aproximada",pos:"expresión / phrase",x:["Can you give me a ballpark figure?","¿Puedes darme una cifra aproximada?"],n:"Una estimación rápida. / A rough estimate."},
+{id:"w17",lv:"B2",en:"heads-up",es:"aviso previo",pos:"sustantivo / noun",x:["Thanks for the heads-up.","Gracias por el aviso."],n:"Informal. / Informal."},
+{id:"w18",lv:"C1",en:"buy-in",es:"respaldo",pos:"sustantivo / noun",x:["We need management buy-in first.","Primero necesitamos el respaldo de la dirección."],n:"Apoyo para seguir adelante. / Support to move forward."},
+{id:"w19",lv:"B1",en:"workload",es:"carga de trabajo",pos:"sustantivo / noun",x:["My workload doubled this month.","Mi carga de trabajo se duplicó este mes."],n:"Cantidad de tareas asignadas. / Amount of assigned tasks."},
+{id:"w20",lv:"B2",en:"onboarding",es:"incorporación",pos:"sustantivo / noun",x:["The onboarding takes two weeks.","La incorporación dura dos semanas."],n:"Proceso de integrar a alguien nuevo. / Integrating a new person."}];
+const findItem=id=>PH.find(p=>p.id===id)||WD.find(p=>p.id===id);
+var wN=0;
+function wodCard(dt){const e=epoch(dt)+wN,it=WD[((e%WD.length)+WD.length)%WD.length],enFirst=((e%2)+2)%2===0,c=el("div","card wod");
+ c.append(el("h3","","Palabra del d\u00eda / Word of the day"));
+ const L=enFirst?[["\ud83c\uddec\ud83c\udde7",it.en,it.x[0]],["\ud83c\uddea\ud83c\uddf8",it.es,it.x[1]]]:[["\ud83c\uddea\ud83c\uddf8",it.es,it.x[1]],["\ud83c\uddec\ud83c\udde7",it.en,it.x[0]]];
+ L.forEach(([f,t])=>c.append(el("div","wodw",f+" "+t)));
+ c.append(el("div","muted",it.pos+" \u00b7 "+it.lv));
+ const xs=el("div","wodx");L.forEach(([f,t,x])=>xs.append(el("div","",f+" "+x)));c.append(xs,el("div","muted",it.n));
+ const sv=el("button","p",inBook(it.id)?"\u2b50 Guardada / Saved":"\u2606 Guardar / Save"),nx=el("button","p","Otra palabra / Another");sv.type=nx.type="button";
+ sv.onclick=()=>{toggleBook(it.id);render()};nx.onclick=()=>{wN++;render()};
+ const bx=el("div");bx.style.cssText="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px";bx.append(sv,nx);c.append(bx);return c}
+function dayView(a){
+ const dt=parse(sel),d=day(sel),info=dayInfo(dt);
+ const nav=el("div","card dcard"),nv=el("div","nav");
+ const sh=x=>{dt.setDate(dt.getDate()+x);sel=iso(dt);cur=new Date(dt);render()};
+ const p=el("button","ib","‹"),n=el("button","ib","›");p.onclick=()=>sh(-1);n.onclick=()=>sh(1);
+ const AB=["ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"],WD=["Domingo / Sunday","Lunes / Monday","Martes / Tuesday","Miércoles / Wednesday","Jueves / Thursday","Viernes / Friday","Sábado / Saturday"];
+ const bd=el("div","bigdate"),sp=el("span","",AB[dt.getMonth()]);sp.append(el("small","",dt.getFullYear()));bd.append(el("b","",dt.getDate()),sp);
+ const dc=el("div","dc");dc.append(bd,el("div","wd",WD[dt.getDay()]),el("div","muted",MES[dt.getMonth()]+" / "+MON[dt.getMonth()]));
+ nv.append(p,dc,n);nav.append(nv);nav.style.textAlign="center";
+ nav.append(el("div","muted",S.mode==="roll"?(info.inside?"Day "+info.n+" of 365":"Outside your 365 days"):"Day "+info.n+" of the year"));a.append(nav);
+ const L=el("div","lang"),its=dayItems(d,dt);
+ L.append(el("h3","","☕ XPRESSO"));
+ LM(L);if(its.ctx&&(!S.lm||S.lm==="phrase"))L.append(el("div","muted","Para tu plan / For your plan: "+its.ctx));
+ if(!S.lm||S.lm==="phrase")its.list.forEach(it=>L.append(phraseCard(it)));
+ const ok=el("button","dark-go",d.lang?"Done / Hecho ✓":"Mark as done / Marcar hecho");ok.style.marginTop="10px";
+ ok.onclick=()=>{d.lang=!d.lang;save();render()};L.append(ok);
+ const T=el("div","card");T.append(el("h3","","Plan del día / Day plan"));T.append(taskList(d));put(a,"plan",T);
+ const Hc=el("div","card");Hc.append(el("h3","","Horario / Schedule"));d.hrs=d.hrs||{};
+ for(let h=6;h<=23;h++){const r=el("div","hr"),inp=document.createElement("input");inp.type="text";inp.value=d.hrs[h]||"";inp.setAttribute("aria-label",h+":00");
+  inp.oninput=()=>{d.hrs[h]=inp.value;save()};if(sel===iso(new Date())&&new Date().getHours()===h)r.classList.add("now");r.append(el("span","hl",h+":00"),inp);Hc.append(r)}
+ put(a,"hours",Hc);
+ const N=el("div","card");N.append(el("h3","","Notas / Notes"));const ta=document.createElement("textarea");ta.value=d.note;ta.placeholder="Escribe libremente aquí. / Write freely here.";
+ ta.oninput=()=>{d.note=ta.value;save()};N.append(ta);put(a,"notes",N);
+ const H=el("div","card");H.append(el("h3","","Hábitos / Habits"));const hb=el("div","hab");
+ S.habits.forEach((h,i)=>{
+  if(i===habEdit){const w=el("label","hb"),ei=document.createElement("input");ei.value=h;ei.style.cssText="width:140px";
+   const ok2=()=>{const n=ei.value.trim();if(n&&n!==h&&!S.habits.includes(n)){S.habits[i]=n;Object.values(S.days).forEach(z=>{if(z.hab&&h in z.hab){z.hab[n]=z.hab[h];delete z.hab[h]}})}habEdit=-1;save();render()};
+   ei.onkeydown=e=>{if(e.key==="Enter")ok2()};const sb=el("button","go","OK");sb.onclick=ok2;w.append(ei,sb);hb.append(w);setTimeout(()=>ei.focus(),0);return}
+  const l=el("label","hb"+(d.hab[h]?" on":"")),c=document.createElement("input");c.type="checkbox";c.checked=!!d.hab[h];
+  c.onchange=()=>{d.hab[h]=c.checked;save();l.classList.toggle("on",c.checked);if(c.checked)burst(l)};
+  const ed=el("button","p","✎");ed.type="button";ed.setAttribute("aria-label","Rename habit");ed.onclick=e=>{e.preventDefault();habEdit=i;render()};
+  const x=el("button","p","✕");x.type="button";x.setAttribute("aria-label","Delete habit");x.onclick=e=>{e.preventDefault();S.habits.splice(i,1);save();render()};
+  l.append(c,el("span","",h),ed,x);hb.append(l)});H.append(hb);
+ const hf=el("div","add"),hi=document.createElement("input");hi.placeholder="Nuevo hábito / New habit";hi.style.cssText="flex:1 1 160px;width:auto";
+ const hbtn=el("button","go","Add");const hgo=()=>{const v=hi.value.trim();if(v&&!S.habits.includes(v)){S.habits.push(v);save();render()}};
+ hbtn.onclick=hgo;hi.onkeydown=e=>{if(e.key==="Enter")hgo()};hf.append(hi,hbtn);H.append(hf);put(a,"habits",H);
+ const dtl=document.createElement("details");dtl.className="card";dtl.open=langOpen;dtl.ontoggle=()=>{langOpen=dtl.open};
+ const sm=document.createElement("summary");sm.append(el("b","","🇬🇧 ☕ XPRESSO - Your daily language fix."+(d.lang?" ✓":"")),el("span","xs","🇪🇸 ☕ XPRESSO - Tu dosis diaria de idiomas."));dtl.append(sm,L);put(a,"lang",dtl,sm);put(a,"wod",wodCard(dt));put(a,"mk",mkCard(d,dt));restore(a)}
+
+const MK=[
+{k:"brief",l:"Briefing / Brief",r:/\bbrief/i,h:["FRASEO","https://xpanol.github.io/DEMOFRASEO/"],p:[["Público objetivo","Target audience"],["Objetivo de campaña","Campaign objective"],["Presupuesto diario","Daily budget"]],f:["El público ha cambiado; propongo alinearnos sobre el brief antes de seguir.","The audience has changed, so I’d like to realign on the brief before we move on."]},
+{k:"setup",l:"Configuración / Setup",r:/setup|configur|segmenta|p[ií]xel/i,h:["KEYWORDS","https://xpanol.github.io/FLASHY/"],p:[["Conjunto de anuncios","Ad set"],["Segmentación","Targeting"],["Puja","Bid"]],f:["No podemos terminar la configuración hasta recibir los creativos finales.","We can’t finish the setup until we receive the final creatives."]},
+{k:"launch",l:"Lanzamiento / Launch",r:/launch|lanz|publicar/i,h:["TRIGGER FIGHTER","https://xpanol.github.io/triggerfighter/"],p:[["Fase de aprendizaje","Learning phase"],["Programar publicación","Schedule post"],["En revisión","In review"]],f:["Aplazamos el lanzamiento a mañana porque los anuncios siguen en revisión.","We’re pushing the launch to tomorrow because the ads are still in review."]},
+{k:"monitor",l:"Seguimiento / Monitoring",r:/monitor|seguim|control/i,h:["PRO!ZONE","https://xpanol.github.io/PROZONE/"],p:[["Impresiones","Impressions"],["Tasa de clics (CTR)","Click-through rate (CTR)"],["Tasa de rebote","Bounce rate"]],f:["El CTR es más bajo de lo esperado, pero es pronto; lo vigilamos de cerca.","CTR is lower than expected, but it’s early. We’re keeping a close eye on it."]},
+{k:"optimize",l:"Optimización / Optimization",r:/optim|ajust|a\/b|pausar/i,h:["BOOSTER LINGÜÍSTICO","https://xpanol.github.io/booster/"],p:[["Coste por adquisición (CPA)","Cost per acquisition (CPA)"],["Retorno de la inversión publicitaria (ROAS)","Return on ad spend (ROAS)"],["Prueba A/B","A/B test"]],f:["Pausamos el conjunto de anuncios más flojo y el CPA bajó un 18 %.","We paused the weakest ad set, and CPA dropped by 18%."]},
+{k:"report",l:"Informe / Report",r:/report|informe|resultado|kpi/i,h:["PRO!ZONE","https://xpanol.github.io/PROZONE/"],p:[["Rendimiento","Performance"],["Periodo de comparación","Comparison period"],["Conversiones atribuidas","Attributed conversions"]],f:["En general superamos lo previsto, pero el ROAS bajó ligeramente.","Overall we beat the forecast, but ROAS dipped slightly."]},
+{k:"client",l:"Llamada con cliente / Client call",r:/client|call|llamada|reuni/i,h:["FRASEO","https://xpanol.github.io/DEMOFRASEO/"],p:[["Entregables","Deliverables"],["Siguientes pasos","Next steps"],["Alcance del trabajo","Scope of work"]],f:["Eso queda fuera del alcance actual, pero podemos valorarlo como ampliación.","That’s outside the current scope, but we can look at it as an add-on."]}];
+SEC.mk="Marketing en 2 idiomas / Marketing in 2 languages";
+if(!S.order.includes("mk"))S.order.splice(S.order.indexOf("plan")+1,0,"mk");
+function mkCard(d,dt){
+ const t=sorted(d.tasks).find(t=>!t.d&&MK.some(g=>g.r.test(t.t))),g=t?MK.find(x=>x.r.test(t.t)):MK[((epoch(dt)%7)+7)%7],c=el("div","card mk");
+ c.append(el("h3","","🛠 Marketing en 2 idiomas / Marketing in 2 languages"),el("p","muted","Hoy / Today: "+g.l+(t?"  ·  "+t.t:"")));
+ g.p.forEach(x=>{const r=el("div","pair");r.append(el("span","","🇪🇸 "+x[0]),el("span","","🇬🇧 "+x[1]));c.append(r)});
+ c.append(el("p","","🇪🇸 "+g.f[0]),el("p","","🇬🇧 "+g.f[1]));
+ const a=el("a","dark-go","Abrir en el Hub / Open in the Hub: "+g.h[0]+" →");a.href=g.h[1];a.target="_blank";a.rel="noopener";c.append(a);return c}
+const PAL=[["","Original","#5C4B99"],["sand","Arena / Sand","#8c7355"],["mocha","Moka / Mocha","#5a4332"],["rose","Rosa empolvado / Powder pink","#e6c2c6"],["stone","Piedra / Stone","#7d746b"],["sage","Salvia / Sage","#5f7a64"],["butter","Mantequilla / Butter","#f3dd8c"],["terra","Terracota / Terracotta","#a65a40"],["denim","Azul polvo / Dusty blue","#5d7898"],["lav","Lavanda / Lavender","#cbbfe6"],["cherry","Cereza / Cherry","#7b2d3f"]];
+function applyPal(){const p=S.pal||"",r=document.documentElement;if(p)r.dataset.palette=p;else delete r.dataset.palette}
+function data(a){
+ const pc=el("div","card");pc.append(el("h3","","Colores / Colours"));const pw=el("div","hab");
+ PAL.forEach(([k,t,c])=>{const l=el("label","hb"+((S.pal||"")===k?" on":"")),r=document.createElement("input");r.type="radio";r.name="pal";r.checked=(S.pal||"")===k;
+  r.onchange=()=>{S.pal=k;save();applyPal();render()};const sw=el("i","sw");sw.style.background=c;l.append(r,sw,el("span","",t));pw.append(l)});pc.append(pw);a.append(pc);
+ const lc=el("div","card");lc.append(el("h3","","Distribución vertical / Portrait layout"));const lw=el("div","hab");
+ [["fill","Libre, llena la pantalla / Free, fills the screen"],["week","Por semanas / By weeks"]].forEach(([k,t])=>{const cur2=S.pl||"fill",l=el("label","hb"+(cur2===k?" on":"")),r=document.createElement("input");r.type="radio";r.name="pl";r.checked=cur2===k;
+  r.onchange=()=>{S.pl=k;save();render()};l.append(r,el("span","",t));lw.append(l)});lc.append(lw);a.append(lc);
+
+ const c=el("div","card");c.append(el("h3","","Modelo de calendario / Calendar model"));
+ c.append(el("p","muted","Tus datos se guardan por fecha, así que puedes cambiar de modelo sin perder nada. / Data is stored by date, so switching models loses nothing."));
+ const l=el("label","muted","Rolling 365 start date: "),i=document.createElement("input");i.type="date";i.value=S.start;
+ i.onchange=()=>{if(i.value){S.start=i.value;save();render()}};l.append(i);c.append(l);a.append(c);
+ const v=el("div","card");v.append(el("h3","","Secciones visibles / Visible sections"));const hw=el("div","hab");
+ Object.keys(SEC).forEach(k=>{const l=el("label","hb"+(S.hide[k]?"":" on")),c=document.createElement("input");c.type="checkbox";c.checked=!S.hide[k];
+  c.onchange=()=>{S.hide[k]=!c.checked;save();l.classList.toggle("on",c.checked)};l.append(c,el("span","",SEC[k]));hw.append(l)});v.append(hw);a.append(v);
+ const e=el("div","card");e.append(el("h3","","Copia / Backup"));
+ const ex=el("button","go","Export JSON");ex.onclick=()=>{const t=JSON.stringify(S);ta.value=t;ta.select();try{navigator.clipboard.writeText(t)}catch(_){}};
+ const im=el("button","go","Import JSON");im.style.marginLeft="8px";
+ const ta=document.createElement("textarea");ta.placeholder="Paste JSON here to import. / Pega el JSON aquí.";
+ im.onclick=()=>{try{const o=JSON.parse(ta.value);if(o&&o.days){S=Object.assign({mode:"cal",start:iso(new Date()),days:{},habits:HABITS.slice(),hide:{},order:["plan","hours","lang","wod","notes","habits"],ov:2},o);save();tab="month";render()}}catch(_){ta.value="Invalid JSON / JSON no válido"}};
+ e.append(ex,im,el("p","muted",""),ta);a.append(e)}
+S.sound=!!S.sound;let AC=null;
+function ctx(){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume()}catch(e){}return AC}
+function beep(){const c=ctx();if(!c)return;const t0=c.currentTime;
+ [0,.28,.56,1.0,1.28,1.56].forEach((o,i)=>{const os=c.createOscillator(),g=c.createGain();os.type="sine";os.frequency.value=i%3===2?1175:880;
+  g.gain.setValueAtTime(0,t0+o);g.gain.linearRampToValueAtTime(.35,t0+o+.02);g.gain.exponentialRampToValueAtTime(.001,t0+o+.22);
+  os.connect(g);g.connect(c.destination);os.start(t0+o);os.stop(t0+o+.25)});
+ try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}
+function sndUI(){const b=$("#snd");b.classList.toggle("on",S.sound);b.textContent=S.sound?"🔔 Alarma ON":"🔕 Alarma OFF";b.setAttribute("aria-pressed",String(S.sound))}
+$("#snd").onclick=()=>{S.sound=!S.sound;save();sndUI();if(S.sound)beep()};
+document.addEventListener("click",()=>{if(S.sound)ctx()});
+const fired=new Set();
+function banner(h,txt){let box=$("#alerts");if(!box){box=el("div");box.id="alerts";box.style.cssText="position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:100;display:flex;flex-direction:column;gap:8px;padding:10px;pointer-events:none";document.body.append(box)}
+ const b=el("div","alert");b.style.pointerEvents="auto";b.append(el("span","","⏰ "+h+"  "+txt));const ok=el("button","go","OK");ok.onclick=()=>b.remove();b.append(ok);box.append(b)}
+function check(){if(!S.sound)return;const n=new Date(),k=iso(n),d=S.days[k];if(!d)return;const nm=n.getHours()*60+n.getMinutes();
+ d.tasks.forEach(t=>{if(!t.h||t.d)return;const[hh,mm]=t.h.split(":").map(Number),due=hh*60+mm,id=k+"|"+t.h+"|"+t.t;
+  if(nm>=due&&nm-due<=1&&!fired.has(id)){fired.add(id);beep();banner(t.h,t.t)}})}
+setInterval(check,5000);document.addEventListener("visibilitychange",check);sndUI();applyPal();
+document.querySelectorAll("#mode button").forEach(b=>b.onclick=()=>{S.mode=b.dataset.m;save();render()});
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
+$("#fy").onclick=()=>{tab="year";render()};
+$("#hideb").onclick=()=>{S.focus=true;save();render()};$("#fb").onclick=()=>{S.focus=false;save();render()};
+$("#fs").onclick=()=>{try{const d=document,r=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement)(d.exitFullscreen||d.webkitExitFullscreen).call(d);else(r.requestFullscreen||r.webkitRequestFullscreen).call(r)}catch(e){}};
+if(!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen))$("#fs").remove();
+const cv=$("#cover");
+function coverYear(){$("#cvy").textContent=S.mode==="roll"?"ROLLING 365 · "+S.start:"CALENDAR YEAR · "+new Date().getFullYear()}
+function openCover(){if(cv.classList.contains("open"))return;cv.classList.add("open");setTimeout(()=>{cv.style.display="none"},matchMedia("(prefers-reduced-motion:reduce)").matches?0:850)}
+cv.addEventListener("click",openCover);coverYear();
+{const h1=$("header h1");h1.style.cursor="pointer";h1.title="Portada / Cover";h1.onclick=()=>{coverYear();cv.style.display="";cv.classList.remove("open")}}
+render();
+</script>
+</body>
+</html>
